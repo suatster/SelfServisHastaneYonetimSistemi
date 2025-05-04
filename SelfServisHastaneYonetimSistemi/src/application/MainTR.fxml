@@ -24,12 +24,12 @@
             <Font size="20.0" />
          </font>
       </Button>
-      <Button fx:id="acilHasta" layoutX="853.0" layoutY="210.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="275.0" text="Acil Hasta">
+      <Button fx:id="acilHasta" layoutX="853.0" layoutY="210.0" mnemonicParsing="false" onAction="#switchToTRAcilHasta" prefHeight="100.0" prefWidth="275.0" text="Acil Hasta">
          <font>
             <Font size="20.0" />
          </font>
       </Button>
-      <Button fx:id="doktorList" layoutX="152.0" layoutY="420.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="275.0" text="Doktorları Listele">
+      <Button fx:id="doktorList" layoutX="152.0" layoutY="420.0" mnemonicParsing="false" onAction="#switchToDoktorList" prefHeight="100.0" prefWidth="275.0" text="Doktorları Listele">
          <font>
             <Font size="20.0" />
          </font>
@@ -39,7 +39,7 @@
             <Font size="20.0" />
          </font>
       </Button>
-      <Button fx:id="cikis" layoutX="853.0" layoutY="420.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="275.0" text="Çıkış">
+      <Button fx:id="cikis" layoutX="853.0" layoutY="420.0" mnemonicParsing="false" onAction="#cikis" prefHeight="100.0" prefWidth="275.0" text="Çıkış">
          <font>
             <Font size="20.0" />
          </font>

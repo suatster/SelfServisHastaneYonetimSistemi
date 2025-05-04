@@ -2,7 +2,10 @@ package application;
 
 import java.io.IOException;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 
 /* Bu importlar normalde stage degistirmek icin kullanilmaktaydi. Sadelesmeye gidildi.
  * 
@@ -15,12 +18,17 @@ import javafx.event.ActionEvent;
 
 public class MainTRController {
 	/* Bu degiskenler normalde stage degistirmek icin kullanilmaktaydi. Sadelesmeye gidildi.
+	 * 
 	 * private Scene scene;
 	 * private Stage stage;
 	 * private Parent root;
 	 */
 	
-	public void switchToTRLogin(ActionEvent event) throws IOException {
+	@FXML
+	private Button siraAl, hastaKayitOlustur, acilHasta, doktorList, randevuList, cikis;
+	
+	@FXML
+	private void switchToTRLogin(ActionEvent event) throws IOException {
 		Main m = new Main();
 		m.changeScene("TRLogin.fxml");
 		
@@ -34,7 +42,8 @@ public class MainTRController {
 		*/
 	}
 	
-	public void switchToTRHastaKayitOlustur(ActionEvent event) throws IOException {
+	@FXML
+	private void switchToTRHastaKayitOlustur(ActionEvent event) throws IOException {
 		Main m = new Main();
 		m.changeScene("TRHastaKayitOlustur.fxml");
 		
@@ -47,4 +56,24 @@ public class MainTRController {
 		 * stage.show();
 		*/
 	}
+	
+	@FXML
+	private void switchToTRAcilHasta(ActionEvent event) throws IOException {
+		Main m = new Main();
+		m.changeScene("TRAcilHasta.fxml");
+	}
+	
+	@FXML
+	private void switchToDoktorList() throws IOException {
+		Main m = new Main();
+		m.changeScene("TRDoktorList1.fxml");
+	}
+	
+	//TODO: private void switchToRandevuList() throws IOException {
+	
+	@FXML
+	private void cikis(ActionEvent event) {
+		Platform.exit();
+	}
+	
 }

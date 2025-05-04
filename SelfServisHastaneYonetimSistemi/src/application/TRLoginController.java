@@ -1,17 +1,22 @@
 package application;
 
+import java.io.IOException;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 
 public class TRLoginController {
 	
 	@FXML
-	private TextArea kimlikNoTextArea;
+	private Button geriDonButon;
+	
+	@FXML
+	private TextField kimlikNoTextField;
 	
 	@FXML
 	private PasswordField sifrePasswordField;
@@ -23,10 +28,17 @@ public class TRLoginController {
 	private Label wrongLogin;
 	
 	@FXML
+	private void initialize() {
+		girisButon.setDefaultButton(true);
+	}
+	
+	@FXML
 	private void login(ActionEvent event) {
-		String kimlikNo = kimlikNoTextArea.getText().trim();
+		String kimlikNo = kimlikNoTextField.getText().trim();
 		
 		try {
+			Long.parseLong(kimlikNo); //Eger sayiya donusturulemezse sembol, harf vb. vardir. Ekrana hata yansitilacak, try-catch
+			
 			//Girilen sayinin buyuklugu kontrol edilmeli, bu kısım 
 			if(kimlikNo.length() != 11) {
 				wrongLogin.setText("Kimlik numaranızın 11 haneli olduğundan emin olunuz.");
@@ -44,6 +56,8 @@ public class TRLoginController {
 					
 					wrongLogin.setText("Giriş başarılı!");
 					wrongLogin.setTextFill(Color.GREEN);
+					
+					//TODO: Randevu sayfasina gecis
 				}
 			}
 			
@@ -54,4 +68,11 @@ public class TRLoginController {
 		}
 		
 	}
+	
+	@FXML
+	private void switchToMainTR(ActionEvent event) throws IOException {
+		Main m = new Main();
+		m.changeScene("MainTR.fxml");
+	}
+	
 }

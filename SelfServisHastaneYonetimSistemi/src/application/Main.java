@@ -9,9 +9,8 @@ import javafx.scene.Parent;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-	public Hasta currHasta;
+	private static Stage stg; //changeScene() metodu icin gerekli
 	
-	private static Stage stg;
 	@Override
 	public void start(Stage primaryStage) {
 		try {
