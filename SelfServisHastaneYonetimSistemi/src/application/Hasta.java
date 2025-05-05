@@ -1,45 +1,41 @@
 package application;
 
-public class Hasta {
+public class Hasta extends BaseUser {
 	//Degiskenler
-	private int id;
+	private int siraNo;
 	private String kimlikNo;
-	private String isim;
 	private String sifre;
 	
-	//Getter - Setter
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
+	//Getter ve Setterlar
 	public String getKimlikNo() {
 		return kimlikNo;
 	}
-
+	
 	public void setKimlikNo(String kimlikNo) {
 		this.kimlikNo = kimlikNo;
 	}
-
-	public String getIsim() {
-		return isim;
-	}
-
-	public void setIsim(String isim) {
-		this.isim = isim;
-	}
-
+	
 	public String getSifre() {
 		return sifre;
 	}
-
+	
 	public void setSifre(String sifre) {
 		this.sifre = sifre;
 	}
-	
-	
+
+	//Constructor
+	public Hasta(int id, String eposta, String isim, String telNo, String kimlikNo, String sifre) {
+		super(id, eposta, isim, telNo);
+		this.kimlikNo = kimlikNo;
+		this.sifre = sifre;
+	}
+
+	public int getSiraNo() {
+		return siraNo;
+	}
+
+	public void setSiraNo(int siraNo) {
+		this.siraNo = siraNo;
+	}
 	
 }
