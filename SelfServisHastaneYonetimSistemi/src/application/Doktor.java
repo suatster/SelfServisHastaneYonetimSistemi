@@ -5,7 +5,7 @@ public class Doktor extends BaseUser {
 	private int sira;
 	private int sonSira;
 	private String alan;
-	private String odaNo;
+	//private String odaNo; //id artık oda numarası
 	
 	//Getter ve Setterlar
 	public int getSira() {
@@ -32,20 +32,10 @@ public class Doktor extends BaseUser {
 		this.alan = alan;
 	}
 	
-	public String getOdaNo() {
-		return odaNo;
-	}
-	
-	public void setOdaNo(String odaNo) {
-		this.odaNo = odaNo;
-	}
-	
 	//Constructor
-	public Doktor(int id, String eposta, String isim, String telNo, int sira, String alan, String odaNo) {
+	public Doktor(int id, String eposta, String isim, String telNo, String alan) {
 		super(id, eposta, isim, telNo);
-		this.sira = sira;
 		this.alan = alan;
-		this.odaNo = odaNo;
 	}
 	
 }
