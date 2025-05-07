@@ -69,7 +69,11 @@ public class MainTRController {
 		m.changeScene("TRDoktorList1.fxml");
 	}
 	
-	//TODO: private void switchToRandevuList() throws IOException {
+	@FXML
+	private void switchToRandevuList() throws IOException {
+		Main m = new Main();
+		m.changeScene("TRRandevuList.fxml");
+	}
 	
 	@FXML
 	private void cikis(ActionEvent event) {

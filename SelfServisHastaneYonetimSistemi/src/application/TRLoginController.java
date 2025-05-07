@@ -45,7 +45,7 @@ public class TRLoginController {
 			}
 			
 			else {
-				String sifre = sifrePasswordField.getText().trim();
+				String sifre = sifrePasswordField.getText().trim(); //Sifre burada initialize edilmeli, hashleyip kontrol edilecek.
 				
 				if(sifre.isBlank()) { //TextField boş mu?
 					wrongLogin.setText("Şifrenizi girdiğinizden emin olunuz.");
