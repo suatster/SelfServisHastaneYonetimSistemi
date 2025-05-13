@@ -1,6 +1,10 @@
 package application;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -52,12 +56,33 @@ public class TRLoginController {
 				}
 				
 				else {					
-					//TODO:kontrol
+
+					try (Connection conn = DatabaseConnection.connect()) {
+						String sql = "SELECT * FROM hasta WHERE kimlikNo = ? AND sifre = ?";
+						PreparedStatement pstmt = conn.prepareStatement(sql);
+						pstmt.setString(1, kimlikNo);
+						pstmt.setString(2, sifre);
+						ResultSet rs = pstmt.executeQuery();
+
+						if (rs.next()) {
+							wrongLogin.setText("Giriş başarılı!");
+							wrongLogin.setTextFill(Color.GREEN);
+
+							//TODO: Randevu sayfasina gecis
+
+						} else {
+							wrongLogin.setText("Kimlik numarası veya şifre hatalı.");
+							wrongLogin.setTextFill(Color.RED);
+						}
+					} catch (SQLException e) {
+						wrongLogin.setText("Veritabanı hatası: " + e.getMessage());
+						wrongLogin.setTextFill(Color.RED);
+						e.printStackTrace();
+					}
 					
-					wrongLogin.setText("Giriş başarılı!");
-					wrongLogin.setTextFill(Color.GREEN);
+
 					
-					//TODO: Randevu sayfasina gecis
+
 				}
 			}
 			
