@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="hastane.db" uuid="eb18c1f1-d397-43ba-9980-94bc09411c3e">
+    <data-source source="LOCAL" name="hastane.db" uuid="3e364d94-075c-4ebd-ba36-772d4bc14554">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/hastane.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/SelfServisHastaneYonetimSistemi/src/application/hastane.db</jdbc-url>
       <jdbc-additional-properties>
         <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />
       </jdbc-additional-properties>
