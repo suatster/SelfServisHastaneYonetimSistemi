@@ -1,10 +1,12 @@
 package application;
 
+import java.io.IOException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
@@ -13,6 +15,9 @@ import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
 
 public class TRRandevuAlController {
+	
+	@FXML
+	private Button kayitOlButon;
 	
 	@FXML
 	private ChoiceBox<String> alanChoiceBox, doktorChoiceBox;
@@ -55,9 +60,10 @@ public class TRRandevuAlController {
 	        }
 	    });
 		
+		//Burada alanlar seçilmeden doktor seçilmemeli
 		alanChoiceBox.getItems().addAll("alan1", "alan2", "alan3");
 		alanChoiceBox.setValue("alan1");
-		
+		//seçilen alana göre doktorlar listelenmeli
 		doktorChoiceBox.getItems().addAll("doktor1", "doktor2", "doktor3");
 		doktorChoiceBox.setValue("doktor1");
 	}
@@ -80,4 +86,8 @@ public class TRRandevuAlController {
 		}
 	}
 	
+	public void geriDon() throws IOException {
+		Main m = new Main();
+		m.changeScene("MainTR.fxml");
+	}
 }

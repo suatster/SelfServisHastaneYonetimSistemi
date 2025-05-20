@@ -62,7 +62,9 @@ public class TRLoginController {
 						String sql = "SELECT * FROM hasta WHERE kimlikNo = ? AND sifre = ?";
 						PreparedStatement pstmt = conn.prepareStatement(sql);
 						pstmt.setString(1, kimlikNo);
-						pstmt.setString(2, sifre);
+						
+						//TODO: sifreler şifrelenmiş şeklinde depolanmalı
+						pstmt.setString(2, sifre); 
 						ResultSet rs = pstmt.executeQuery();
 
 						if (rs.next()) {

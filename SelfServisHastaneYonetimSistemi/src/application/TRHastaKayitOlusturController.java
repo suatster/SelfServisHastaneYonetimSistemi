@@ -45,7 +45,8 @@ public class TRHastaKayitOlusturController {
 				}
 				
 				else {
-					//database kayıtları buraya yapılmalı.
+					//database kayıtları buraya yapılmalı ve sifre sifrelenerek depolanmalı
+					//TRLoginControllerda da sifrelenmeli
 					badAttempt.setTextFill(Color.GREEN);
 					badAttempt.setText("Kaydınız oluşturuldu.");
 				}
