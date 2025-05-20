@@ -52,6 +52,7 @@ public class TRLoginController {
 				String sifre = sifrePasswordField.getText().trim(); //Sifre burada initialize edilmeli, hashleyip kontrol edilecek.
 				
 				if(sifre.isBlank()) { //TextField boş mu?
+					wrongLogin.setTextFill(Color.RED);
 					wrongLogin.setText("Şifrenizi girdiğinizden emin olunuz.");
 				}
 				
@@ -67,8 +68,12 @@ public class TRLoginController {
 						if (rs.next()) {
 							wrongLogin.setText("Giriş başarılı!");
 							wrongLogin.setTextFill(Color.GREEN);
-
-							//TODO: Randevu sayfasina gecis
+							
+							try {
+								switchToTRRandevuAl();
+							} catch (IOException e) {
+								wrongLogin.setText("Eksik dosya mevcut. Lütfen yetkililerle iletişime geçin.");
+							}
 
 						} else {
 							wrongLogin.setText("Kimlik numarası veya şifre hatalı.");
@@ -94,10 +99,16 @@ public class TRLoginController {
 		
 	}
 	
+	private void switchToTRRandevuAl() throws IOException {
+		Main m = new Main();
+		m.changeScene("TRRandevuAl.fxml");
+	}
+	
 	@FXML
 	private void switchToMainTR(ActionEvent event) throws IOException {
 		Main m = new Main();
 		m.changeScene("MainTR.fxml");
 	}
+	
 	
 }

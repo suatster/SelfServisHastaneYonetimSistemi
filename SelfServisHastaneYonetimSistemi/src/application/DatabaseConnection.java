@@ -12,7 +12,6 @@ public class DatabaseConnection {
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(DB_URL);
-            System.out.println("Veritabanına bağlandı!");
         } catch (SQLException e) {
             System.out.println("Bağlantı hatası: " + e.getMessage());
         }
