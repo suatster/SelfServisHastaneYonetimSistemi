@@ -37,7 +37,7 @@
             <Font size="22.0" />
          </font>
       </PasswordField>
-      <Button fx:id="girisButon" layoutX="593.0" layoutY="390.0" mnemonicParsing="false" onAction="#login" text="Giriş Yap">
+      <Button fx:id="girisButon" defaultButton="true" layoutX="593.0" layoutY="390.0" mnemonicParsing="false" onAction="#login" text="Giriş Yap">
          <font>
             <Font size="18.0" />
          </font>

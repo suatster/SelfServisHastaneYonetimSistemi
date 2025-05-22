@@ -1,6 +1,8 @@
 package application;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -56,15 +58,15 @@ public class TRLoginController {
 					wrongLogin.setText("Şifrenizi girdiğinizden emin olunuz.");
 				}
 				
-				else {					
-
+				else {
+					String hashedSifre = hashSifre(sifre);
 					try (Connection conn = DatabaseConnection.connect()) {
 						String sql = "SELECT * FROM hasta WHERE kimlikNo = ? AND sifre = ?";
 						PreparedStatement pstmt = conn.prepareStatement(sql);
 						pstmt.setString(1, kimlikNo);
 						
 						//TODO: sifreler şifrelenmiş şeklinde depolanmalı
-						pstmt.setString(2, sifre); 
+						pstmt.setString(2, hashedSifre);
 						ResultSet rs = pstmt.executeQuery();
 
 						if (rs.next()) {
@@ -75,6 +77,7 @@ public class TRLoginController {
 								switchToTRRandevuAl();
 							} catch (IOException e) {
 								wrongLogin.setText("Eksik dosya mevcut. Lütfen yetkililerle iletişime geçin.");
+								wrongLogin.setTextFill(Color.RED);
 							}
 
 						} else {
@@ -99,6 +102,24 @@ public class TRLoginController {
 			wrongLogin.setText("Lütfen kimlik numaranızda harf, sembol vb. karakterler olmadığından emin olunuz.");
 		}
 		
+	}
+
+	private String hashSifre(String sifre) {
+		try {
+			MessageDigest md = MessageDigest.getInstance("SHA-256");
+			byte[] hash = md.digest(sifre.getBytes());
+			StringBuilder hexString = new StringBuilder();
+
+			for (byte b : hash) {
+				String hex = Integer.toHexString(0xff & b);
+				if (hex.length() == 1) hexString.append('0');
+				hexString.append(hex);
+			}
+			return hexString.toString();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	private void switchToTRRandevuAl() throws IOException {
