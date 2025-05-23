@@ -1,10 +1,7 @@
 package application;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -188,20 +185,24 @@ public class TRRandevuAlController {
 	}
 
 	private boolean randevuKaydet(int doktorId, String tarih, String saat) {
-		String sql = "INSERT INTO randevu (hasta_id, doktor_id, tarih, saat) VALUES (?, ?, ?, ?)";
+		// doğrudan hasta_kimlikNo sütununa TC’yi yazıyoruz
+		String sql = "INSERT INTO randevu (hasta_kimlikNo, doktor_id, tarih, saat) VALUES (?, ?, ?, ?)";
+
 		try (Connection conn = DatabaseConnection.connect();
 			 PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setString(1, hastaKimlikNo);
-			pstmt.setInt(2, doktorId);
+
+			pstmt.setString(1, hastaKimlikNo);  // TC kimlik no
+			pstmt.setInt   (2, doktorId);
 			pstmt.setString(3, tarih);
 			pstmt.setString(4, saat);
 			pstmt.executeUpdate();
 			return true;
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
 		}
 	}
+
 
 	public void geriDon() throws IOException {
 		Main m = new Main();

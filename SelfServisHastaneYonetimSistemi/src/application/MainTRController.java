@@ -5,7 +5,11 @@ import java.io.IOException;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
 
 /* Bu importlar normalde stage degistirmek icin kullanilmaktaydi. Sadelesmeye gidildi.
  * 
@@ -68,13 +72,27 @@ public class MainTRController {
 		Main m = new Main();
 		m.changeScene("TRDoktorList1.fxml");
 	}
-	
+
+	// Örnek: MainTRController içinde
 	@FXML
-	private void switchToRandevuList() throws IOException {
-		Main m = new Main();
-		m.changeScene("TRRandevuList.fxml");
+	private void switchToRandevuList(ActionEvent event) throws IOException {
+		FXMLLoader loader = new FXMLLoader(
+				getClass().getResource("/application/TRRandevuList.fxml")
+		);
+		Parent root = loader.load();
+
+		// 1) Controller’ı al, TC'yi gönder
+		TRRandevuListController ctrl = loader.getController();
+		ctrl.setHastaKimlikNo(TRLoginController.LOGGED_IN_TC);
+		// veya CURRENT_HASTA_KIMLIK alanınıza uygun bir değişken
+
+		// 2) Sahneyi değiştir
+		Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+		stage.getScene().setRoot(root);
 	}
-	
+
+
+
 	@FXML
 	private void cikis(ActionEvent event) {
 		Platform.exit();

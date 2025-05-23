@@ -1,10 +1,12 @@
 package application;
 
+import javafx.collections.ObservableList;
+import javafx.stage.Stage;
+
 public class Randevu {
 	//Degiskenler
 	private Doktor doktor;
 	private Hasta hasta;
-	
 	private String saat;
 	
 	
@@ -47,8 +49,7 @@ public class Randevu {
 		this.hasta = hasta;
 		this.saat = saat;
 
-		doktor.setSonSira(doktor.getSonSira() + 1); //Son sirayi 1 artir, yeni ekliyoruz.
-		hasta.setSiraNo(doktor.getSonSira() + 1); //Hastanin sirasini ayarla.
+
 	}
 	
 }
