@@ -60,6 +60,7 @@ public class TRLoginController {
 				
 				else {
 					String hashedSifre = hashSifre(sifre);
+					System.out.println(hashedSifre);
 					try (Connection conn = DatabaseConnection.connect()) {
 						String sql = "SELECT * FROM hasta WHERE kimlikNo = ? AND sifre = ?";
 						PreparedStatement pstmt = conn.prepareStatement(sql);
