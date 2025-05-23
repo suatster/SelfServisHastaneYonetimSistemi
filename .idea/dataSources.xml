@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="hastane.db" uuid="ea169a70-e191-4bac-8b14-f6abb51fff8b">
+    <data-source source="LOCAL" name="hastane.db" uuid="9163cd28-3f9d-4d22-88a9-3b06d9664bbe">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>

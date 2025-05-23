@@ -34,6 +34,8 @@ public class TRRandevuAlController {
 	@FXML
 	public DatePicker tarihPicker;
 
+
+
 	private String hastaKimlikNo;
 
 	// Doktor isimlerini ID ile eşleştirme
@@ -186,7 +188,7 @@ public class TRRandevuAlController {
 	}
 
 	private boolean randevuKaydet(int doktorId, String tarih, String saat) {
-		String sql = "INSERT INTO randevu (hasta_kimlikNo, doktor_id, tarih, saat) VALUES (?, ?, ?, ?)";
+		String sql = "INSERT INTO randevu (hasta_id, doktor_id, tarih, saat) VALUES (?, ?, ?, ?)";
 		try (Connection conn = DatabaseConnection.connect();
 			 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, hastaKimlikNo);
@@ -200,7 +202,7 @@ public class TRRandevuAlController {
 			return false;
 		}
 	}
-	
+
 	public void geriDon() throws IOException {
 		Main m = new Main();
 		m.changeScene("MainTR.fxml");

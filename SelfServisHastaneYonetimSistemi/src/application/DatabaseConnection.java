@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class DatabaseConnection {
 
-    private static final String DB_URL = "jdbc:sqlite:src/application/hastane.db";
+    private static final String DB_URL = "jdbc:sqlite:hastane.db";
 
     public static Connection connect() {
         Connection conn = null;
