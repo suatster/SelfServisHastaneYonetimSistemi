@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.SplitPane?>
@@ -10,92 +11,48 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<?import javafx.scene.control.DatePicker?>
-<AnchorPane xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="application.TRRandevuAlController"
-            prefWidth="1280.0" prefHeight="720.0"
-            style="-fx-background-color: bisque;">
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: bisque;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.TRRandevuAlController">
     <children>
         <!-- Başlık Çubuğu -->
-        <Rectangle arcWidth="5.0" arcHeight="5.0"
-                   fill="DODGERBLUE"
-                   stroke="BLACK" strokeType="INSIDE"
-                   width="1280.0" height="100.0"/>
+        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="100.0" stroke="BLACK" strokeType="INSIDE" width="1280.0" />
 
         <!-- SplitPane ile iki bölüm -->
-        <SplitPane layoutY="100.0"
-                   prefWidth="1280.0" prefHeight="620.0"
-                   style="-fx-background-color: bisque;"
-                   dividerPositions="0.5">
+        <SplitPane dividerPositions="0.5" layoutY="100.0" prefHeight="620.0" prefWidth="1280.0" style="-fx-background-color: bisque;">
             <items>
                 <!-- Sağ bölüm: Alan ve Doktor seçimi -->
-                <AnchorPane prefWidth="640.0"
-                            style="-fx-background-color: bisque;">
+                <AnchorPane prefWidth="640.0" style="-fx-background-color: bisque;">
                     <children>
-                        <Label text="Alan"
-                               layoutX="168.0" layoutY="96.0"
-                               prefWidth="300.0" prefHeight="25.0"
-                               alignment="CENTER">
-                            <font><Font size="16.0"/></font>
+                        <Label alignment="CENTER" layoutX="168.0" layoutY="96.0" prefHeight="25.0" prefWidth="300.0" text="Alan">
+                            <font><Font size="16.0" /></font>
                         </Label>
-                        <ChoiceBox fx:id="alanChoiceBox"
-                                   layoutX="168.0" layoutY="120.0"
-                                   prefWidth="300.0"/>
+                        <ChoiceBox fx:id="alanChoiceBox" layoutX="168.0" layoutY="120.0" prefWidth="300.0" />
 
-                        <Label text="Doktor"
-                               layoutX="168.0" layoutY="273.0"
-                               prefWidth="300.0" prefHeight="25.0"
-                               alignment="CENTER">
-                            <font><Font size="16.0"/></font>
+                        <Label alignment="CENTER" layoutX="168.0" layoutY="273.0" prefHeight="25.0" prefWidth="300.0" text="Doktor">
+                            <font><Font size="16.0" /></font>
                         </Label>
-                        <ChoiceBox fx:id="doktorChoiceBox"
-                                   layoutX="168.0" layoutY="298.0"
-                                   prefWidth="300.0"/>
+                        <ChoiceBox fx:id="doktorChoiceBox" layoutX="168.0" layoutY="298.0" prefWidth="300.0" />
 
-                        <Button fx:id="geriDonButon"
-                                text="Geri Dön"
-                                layoutX="14.0" layoutY="20.0"
-                                mnemonicParsing="false"
-                                onAction="#geriDon"/>
+                        <Button fx:id="geriDonButon" layoutX="14.0" layoutY="20.0" mnemonicParsing="false" onAction="#geriDon" text="Geri Dön" />
                     </children>
                 </AnchorPane>
 
                 <!-- Sol bölüm: Tarih, Saat ve Randevu işlemleri -->
-                <AnchorPane prefWidth="640.0"
-                            style="-fx-background-color: bisque;">
+                <AnchorPane prefWidth="640.0" style="-fx-background-color: bisque;">
                     <children>
-                        <Label text="Tarih"
-                               layoutX="50.0" layoutY="0.0"
-                               prefWidth="100.0" prefHeight="25.0"
-                               alignment="CENTER">
-                            <font><Font size="16.0"/></font>
+                        <Label alignment="CENTER" layoutX="229.0" layoutY="96.0" prefHeight="25.0" prefWidth="180.0" text="Tarih">
+                            <font><Font size="16.0" /></font>
                         </Label>
-                        <DatePicker fx:id="tarihPicker"
-                                    layoutX="50.0" layoutY="20.0"/>
+                        <DatePicker fx:id="tarihPicker" layoutX="229.0" layoutY="121.0" />
 
-                        <Label text="Saat"
-                               layoutX="242.0" layoutY="95.0"
-                               prefWidth="152.0" prefHeight="25.0"
-                               alignment="CENTER">
-                            <font><Font size="16.0"/></font>
+                        <Label alignment="CENTER" layoutX="246.0" layoutY="268.0" prefHeight="25.0" prefWidth="152.0" text="Saat">
+                            <font><Font size="16.0" /></font>
                         </Label>
-                        <Spinner fx:id="saatSpinner"
-                                 editable="true"
-                                 layoutX="242.0" layoutY="120.0"/>
+                        <Spinner fx:id="saatSpinner" editable="true" layoutX="246.0" layoutY="293.0" />
 
-                        <Button fx:id="kayitOlButon"
-                                text="Randevu Al"
-                                defaultButton="true"
-                                layoutX="280.0" layoutY="294.0"
-                                onAction="#kayitOl"/>
+                        <Button fx:id="kayitOlButon" defaultButton="true" layoutX="278.0" layoutY="360.0" onAction="#kayitOl" text="Randevu Al" />
 
-                        <Label fx:id="kayitDurum"
-                               layoutX="0.0" layoutY="252.0"
-                               prefWidth="644.0" prefHeight="32.0"
-                               textFill="RED"
-                               alignment="CENTER">
-                            <font><Font size="22.0"/></font>
+                        <Label fx:id="kayitDurum" alignment="CENTER" layoutX="0.0" layoutY="252.0" prefHeight="32.0" prefWidth="644.0" textFill="RED">
+                            <font><Font size="22.0" /></font>
                         </Label>
                     </children>
                 </AnchorPane>
@@ -103,10 +60,8 @@
         </SplitPane>
 
         <!-- Başlık Metni -->
-        <Text text="Randevu Al..."
-              layoutX="40.0" layoutY="50.0"
-              strokeType="OUTSIDE" strokeWidth="0.0">
-            <font><Font size="22.0"/></font>
+        <Text layoutX="40.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Randevu Al...">
+            <font><Font size="22.0" /></font>
         </Text>
     </children>
 </AnchorPane>
