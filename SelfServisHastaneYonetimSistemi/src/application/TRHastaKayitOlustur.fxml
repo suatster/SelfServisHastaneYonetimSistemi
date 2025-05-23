@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Rectangle?>
@@ -21,27 +22,54 @@
             <Font size="18.0" />
          </font>
       </Text>
+      <SplitPane dividerPositions="0.5" layoutY="100.0" prefHeight="620.0" prefWidth="1280.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: bisque;">
+               <children>
+                  <TextField fx:id="istenenTelNo" layoutX="182.0" layoutY="188.0" promptText="Telefon Numaranızı Giriniz">
+                     <font>
+                        <Font size="22.0" />
+                     </font>
+                  </TextField>
+                  <TextField fx:id="istenenIsim" layoutX="182.0" layoutY="120.0" promptText="Ad-Soyadınızı giriniz">
+                     <font>
+                        <Font size="22.0" />
+                     </font>
+                  </TextField>
+                  <TextField fx:id="istenenEPosta" layoutX="182.0" layoutY="256.0" promptText="E-Posta adresinizi giriniz">
+                     <font>
+                        <Font size="22.0" />
+                     </font>
+                  </TextField>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="618.0" prefWidth="648.0" style="-fx-background-color: bisque;">
+               <children>
+                  <TextField fx:id="istenenSifre" layoutX="168.0" layoutY="188.0" prefWidth="300.0" promptText="Şifrenizi giriniz...">
+                     <font>
+                        <Font size="22.0" />
+                     </font>
+                  </TextField>
+                  <TextField fx:id="istenenKimlik" layoutX="168.0" layoutY="120.0" prefWidth="300.0" promptText="Kimlik Numaranızı Giriniz....">
+                     <font>
+                        <Font size="22.0" />
+                     </font>
+                  </TextField>
+                  <Button fx:id="kayitOlButon" layoutX="271.0" layoutY="370.0" mnemonicParsing="false" onAction="#kayitOl" text="Kayıt Ol">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Button>
+                  <TextField fx:id="istenenSifreTekrar" layoutX="168.0" layoutY="256.0" prefWidth="300.0" promptText="Şifreyi tekrar ediniz...">
+                     <font>
+                        <Font size="22.0" />
+                     </font>
+                  </TextField>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
       <Button fx:id="geriDonButon" layoutX="14.0" layoutY="120.0" mnemonicParsing="false" onAction="#switchToMainTR" text="Geri Dön" />
-      <TextField fx:id="istenenKimlik" layoutX="490.0" layoutY="212.0" prefWidth="300.0" promptText="Kimlik Numaranızı Giriniz....">
-         <font>
-            <Font size="22.0" />
-         </font>
-      </TextField>
-      <TextField fx:id="istenenSifre" layoutX="490.0" layoutY="282.0" prefWidth="300.0" promptText="Şifrenizi giriniz...">
-         <font>
-            <Font size="22.0" />
-         </font>
-      </TextField>
-      <TextField fx:id="istenenSifreTekrar" layoutX="490.0" layoutY="352.0" prefWidth="300.0" promptText="Şifreyi tekrar ediniz...">
-         <font>
-            <Font size="22.0" />
-         </font>
-      </TextField>
-      <Button fx:id="kayitOlButon" layoutX="593.0" layoutY="423.0" mnemonicParsing="false" onAction="#kayitOl" text="Kayıt Ol">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Button>
       <Label fx:id="badAttempt" alignment="CENTER" contentDisplay="CENTER" layoutY="174.0" prefHeight="25.0" prefWidth="1280.0" textFill="RED">
          <font>
             <Font size="16.0" />

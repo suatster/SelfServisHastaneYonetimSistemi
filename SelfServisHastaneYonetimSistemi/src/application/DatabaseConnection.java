@@ -4,10 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DatabaseConnection {
-
-    private static final String DB_URL = "jdbc:sqlite:src/application/hastane.db";
-
+public class DatabaseConnection implements IStable{
     public static Connection connect() {
         Connection conn = null;
         try {

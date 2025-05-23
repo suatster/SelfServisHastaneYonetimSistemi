@@ -6,7 +6,6 @@ public class Doktor extends BaseUser {
 	//private String odaNo; //id artık oda numarası
 	
 	//Getter ve Setterlar
-
 	public String getAlan() {
 		return alan;
 	}
@@ -19,6 +18,11 @@ public class Doktor extends BaseUser {
 	public Doktor(int id, String eposta, String isim, String telNo, String alan) {
 		super(id, eposta, isim, telNo);
 		this.alan = alan;
+	}
+	
+	@Override
+	public String toString() {
+		return ("id:" + getId() + " eposta:" + getEposta() + " isim:" + getIsim() + " telNo:" + getTelNo() + " alan:" + alan);
 	}
 	
 }

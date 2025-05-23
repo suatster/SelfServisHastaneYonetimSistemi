@@ -48,4 +48,9 @@ public abstract class BaseUser {
 		this.telNo = telNo;
 	}
 	
+	//toString() function for future debugging purposes
+	public String toString() {
+		return ("id:" + id + " eposta:" + eposta + " isim:" + isim + " telNo:" + telNo);
+	}
+	
 }

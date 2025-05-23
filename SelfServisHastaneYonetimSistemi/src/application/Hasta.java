@@ -2,7 +2,6 @@ package application;
 
 public class Hasta extends BaseUser {
 	//Degiskenler
-	private int siraNo;
 	private String kimlikNo;
 	private String sifre;
 	
@@ -29,13 +28,9 @@ public class Hasta extends BaseUser {
 		this.kimlikNo = kimlikNo;
 		this.sifre = sifre;
 	}
-
-	public int getSiraNo() {
-		return siraNo;
-	}
-
-	public void setSiraNo(int siraNo) {
-		this.siraNo = siraNo;
-	}
 	
+	@Override
+	public String toString() {
+		return ("id:" + getId() + " eposta:" + getEposta() + " isim:" + getIsim() + " telNo:" + getTelNo() + " kimlikNo:" + kimlikNo);
+	}
 }

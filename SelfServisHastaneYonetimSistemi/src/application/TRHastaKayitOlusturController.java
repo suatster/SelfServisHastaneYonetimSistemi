@@ -20,7 +20,7 @@ public class TRHastaKayitOlusturController {
 	private Label badAttempt;
 	
 	@FXML
-	private TextField istenenKimlik, istenenSifre, istenenSifreTekrar;
+	private TextField istenenIsim, istenenTelNo, istenenEPosta, istenenKimlik, istenenSifre, istenenSifreTekrar;
 	
 	@FXML
 	private void switchToMainTR() throws IOException {
@@ -44,9 +44,13 @@ public class TRHastaKayitOlusturController {
 				String sifreText = istenenSifre.getText().trim();
 				String sifreTekrarText = istenenSifreTekrar.getText().trim();
 				
-				if(sifreText.isEmpty() || sifreTekrarText.isEmpty()) {
+				String isimText = istenenIsim.getText().trim();
+				String telNoText = istenenTelNo.getText().trim();
+				String epostaText = istenenEPosta.getText().trim();
+				
+				if(sifreText.isEmpty() || sifreTekrarText.isEmpty() || isimText.isEmpty() || telNoText.isEmpty() || epostaText.isEmpty()) {
 					badAttempt.setTextFill(Color.RED);
-					badAttempt.setText("Şifre alanı boş olmamalı.");
+					badAttempt.setText("Tüm alanları doldurduğunuzdan emin olunuz.");
 				}
 				else if (!sifreText.equals(sifreTekrarText)) {
 					badAttempt.setTextFill(Color.RED);
@@ -56,11 +60,7 @@ public class TRHastaKayitOlusturController {
 				else {
 					String hashedSifre = hashSifre(sifreText);
 
-					// Örnek veriler - Gerçek formda kullanıcıdan alınacak
-					String isim = "Hasta Adı";
-
-
-					if (hastaKaydet(istenenKimlikTxt, isim, hashedSifre)) {
+					if (hastaKaydet(epostaText, isimText, telNoText, istenenKimlikTxt, hashedSifre)) {
 						badAttempt.setTextFill(Color.GREEN);
 						badAttempt.setText("Kaydınız başarıyla oluşturuldu.");
 					} else {
@@ -96,17 +96,20 @@ public class TRHastaKayitOlusturController {
 			e.printStackTrace();
 			return null;
 		}
+		
 	}
 
-	private boolean hastaKaydet(String kimlikNo, String isim, String hashedSifre) {
-		String sql = "INSERT INTO hasta (kimlikNo, isim, sifre) VALUES (?, ?, ?)";
+	private boolean hastaKaydet(String eposta, String isim, String telNo, String kimlikNo, String sifre) {
+		String sql = "INSERT INTO hasta (eposta, isim, telNo, kimlikNo, sifre) VALUES (?, ?, ?, ?, ?)";
 
 		try (Connection conn = DatabaseConnection.connect();
 			 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-			pstmt.setString(1, kimlikNo);
+			pstmt.setString(1, eposta);
 			pstmt.setString(2, isim);
-			pstmt.setString(3, hashedSifre);
+			pstmt.setString(3, telNo);
+			pstmt.setString(4, kimlikNo);
+			pstmt.setString(5, sifre);
 			pstmt.executeUpdate();
 			return true;
 		} catch (Exception e) {

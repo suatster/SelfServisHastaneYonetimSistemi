@@ -1,12 +1,10 @@
 package application;
 
-import javafx.collections.ObservableList;
-import javafx.stage.Stage;
-
 public class Randevu {
 	//Degiskenler
 	private Doktor doktor;
 	private Hasta hasta;
+	
 	private String saat;
 	
 	
@@ -48,8 +46,6 @@ public class Randevu {
 		this.doktor = doktor;
 		this.hasta = hasta;
 		this.saat = saat;
-
-
 	}
 	
 }
