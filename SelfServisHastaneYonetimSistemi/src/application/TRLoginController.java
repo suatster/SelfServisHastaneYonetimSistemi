@@ -79,6 +79,7 @@ public class TRLoginController {
 							} catch (IOException e) {
 								wrongLogin.setText("Eksik dosya mevcut. Lütfen yetkililerle iletişime geçin.");
 								wrongLogin.setTextFill(Color.RED);
+								e.printStackTrace();
 							}
 
 						} else {

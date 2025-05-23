@@ -32,7 +32,7 @@ public class TRRandevuAlController {
 	private Spinner<LocalTime> saatSpinner;
 
 	@FXML
-	private DatePicker tarihPicker;
+	public DatePicker tarihPicker;
 
 	private String hastaKimlikNo;
 
@@ -49,6 +49,19 @@ public class TRRandevuAlController {
 
 		alanChoiceBox.getItems().addAll(getAlanlarFromDB());
 		alanChoiceBox.setOnAction(e -> doktorlariYukle(alanChoiceBox.getValue()));
+		
+		if (!alanChoiceBox.getItems().isEmpty()) {
+		    alanChoiceBox.setValue(alanChoiceBox.getItems().get(0)); // İlk alan seçilsin
+		    doktorlariYukle(alanChoiceBox.getValue());
+		}
+		
+		tarihPicker.setDayCellFactory(picker -> new DateCell() {
+		    @Override
+		    public void updateItem(LocalDate date, boolean empty) {
+		        super.updateItem(date, empty);
+		        setDisable(empty || date.isBefore(LocalDate.now()));
+		    }
+		});
 	}
 
 	public void initializeSpinner() {
