@@ -10,14 +10,18 @@ import java.sql.SQLException;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
 public class TRLoginController {
-	
+	public static String LOGGED_IN_TC;
 	@FXML
 	private Button geriDonButon;
 	
@@ -37,74 +41,72 @@ public class TRLoginController {
 	private void initialize() {
 		girisButon.setDefaultButton(true);
 	}
-	
+
 	@FXML
 	private void login(ActionEvent event) {
 		String kimlikNo = kimlikNoTextField.getText().trim();
-		
+
 		try {
-			Long.parseLong(kimlikNo); //Eger sayiya donusturulemezse sembol, harf vb. vardir. Ekrana hata yansitilacak, try-catch
-			
-			//Girilen sayinin buyuklugu kontrol edilmeli, bu kısım 
-			if(kimlikNo.length() != 11) {
+			Long.parseLong(kimlikNo);
+			if (kimlikNo.length() != 11) {
 				wrongLogin.setText("Kimlik numaranızın 11 haneli olduğundan emin olunuz.");
+				wrongLogin.setTextFill(Color.RED);
+				return;
 			}
-			
-			else {
-				String sifre = sifrePasswordField.getText().trim(); //Sifre burada initialize edilmeli, hashleyip kontrol edilecek.
-				
-				if(sifre.isBlank()) { //TextField boş mu?
+
+			String sifre = sifrePasswordField.getText().trim();
+			if (sifre.isBlank()) {
+				wrongLogin.setText("Şifrenizi girdiğinizden emin olunuz.");
+				wrongLogin.setTextFill(Color.RED);
+				return;
+			}
+
+			String hashedSifre = hashSifre(sifre);
+			try (Connection conn = DatabaseConnection.connect()) {
+				String sql = "SELECT * FROM hasta WHERE kimlikNo = ? AND sifre = ?";
+				PreparedStatement pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, kimlikNo);
+				pstmt.setString(2, hashedSifre);
+				ResultSet rs = pstmt.executeQuery();
+
+				if (rs.next()) {
+					LOGGED_IN_TC = kimlikNo;
+					wrongLogin.setText("Giriş başarılı!");
+					wrongLogin.setTextFill(Color.GREEN);
+
+					// --- Burayı değiştiriyoruz: ---
+					FXMLLoader loader = new FXMLLoader(
+							getClass().getResource("/application/TRRandevuAl.fxml")
+					);
+					Parent root = loader.load();
+
+					// 1) Controller’ı alıp TC’yi set et
+					TRRandevuAlController ctrl = loader.getController();
+					ctrl.setHastaKimlikNo(kimlikNo);
+
+					// 2) Sahneyi değiştir
+					Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+					stage.getScene().setRoot(root);
+					// ---------------------------------
+				} else {
+					wrongLogin.setText("Kimlik numarası veya şifre hatalı.");
 					wrongLogin.setTextFill(Color.RED);
-					wrongLogin.setText("Şifrenizi girdiğinizden emin olunuz.");
-				}
-				
-				else {
-					String hashedSifre = hashSifre(sifre);
-					System.out.println(hashedSifre);
-					try (Connection conn = DatabaseConnection.connect()) {
-						String sql = "SELECT * FROM hasta WHERE kimlikNo = ? AND sifre = ?";
-						PreparedStatement pstmt = conn.prepareStatement(sql);
-						pstmt.setString(1, kimlikNo);
-						
-						//TODO: sifreler şifrelenmiş şeklinde depolanmalı
-						pstmt.setString(2, hashedSifre);
-						ResultSet rs = pstmt.executeQuery();
-
-						if (rs.next()) {
-							wrongLogin.setText("Giriş başarılı!");
-							wrongLogin.setTextFill(Color.GREEN);
-							
-							try {
-								switchToTRRandevuAl();
-							} catch (IOException e) {
-								wrongLogin.setText("Eksik dosya mevcut. Lütfen yetkililerle iletişime geçin.");
-								wrongLogin.setTextFill(Color.RED);
-								e.printStackTrace();
-							}
-
-						} else {
-							wrongLogin.setText("Kimlik numarası veya şifre hatalı.");
-							wrongLogin.setTextFill(Color.RED);
-						}
-					} catch (SQLException e) {
-						wrongLogin.setText("Veritabanı hatası: " + e.getMessage());
-						wrongLogin.setTextFill(Color.RED);
-						e.printStackTrace();
-					}
-					
-
-					
-
 				}
 			}
-			
+		} catch (NumberFormatException e) {
+			wrongLogin.setText("Kimlik numaranızda sadece rakam olduğundan emin olunuz.");
+			wrongLogin.setTextFill(Color.RED);
+		} catch (SQLException e) {
+			wrongLogin.setText("Veritabanı hatası: " + e.getMessage());
+			wrongLogin.setTextFill(Color.RED);
+			e.printStackTrace();
+		} catch (IOException e) {
+			wrongLogin.setText("Ekran yüklenemedi. Lütfen yetkililerle iletişime geçin.");
+			wrongLogin.setTextFill(Color.RED);
+			e.printStackTrace();
 		}
-		
-		catch(NumberFormatException e){
-			wrongLogin.setText("Lütfen kimlik numaranızda harf, sembol vb. karakterler olmadığından emin olunuz.");
-		}
-		
 	}
+
 
 	private String hashSifre(String sifre) {
 		try {
@@ -124,10 +126,7 @@ public class TRLoginController {
 		}
 	}
 	
-	private void switchToTRRandevuAl() throws IOException {
-		Main m = new Main();
-		m.changeScene("TRRandevuAl.fxml");
-	}
+
 	
 	@FXML
 	private void switchToMainTR(ActionEvent event) throws IOException {

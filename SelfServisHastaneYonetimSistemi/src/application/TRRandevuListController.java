@@ -1,141 +1,131 @@
 package application;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
 
 public class TRRandevuListController {
-	private FilteredList<Randevu> filtRandevuList;
-	
-	@FXML
-	private TextField filtSaat, filtAlan, filtDoktor, filtHasta;
-	
-	@FXML
-	private TableView<Randevu> randevuTable;
-	
-	@FXML
-	private TableColumn<Randevu, String> alan, saat, doktorAdi, hastaAdi;
-	
-	@FXML
-	private ObservableList<Randevu> randevuObs = FXCollections.observableArrayList();
-	
-	@FXML
-	private Button filtreleButon, geriDonButon, temizleButon;
-	
-	@FXML
-	private void switchToMainTR() throws IOException {
-		Main m = new Main();
-		m.changeScene("MainTR.fxml");
+	/** Login’dan atanan hasta kimlikNo **/
+	public static String CURRENT_HASTA_KIMLIK;
+
+	/** Bu setter, loader sonrası login’daki TC’yi buraya set etmek için çağrılacak **/
+	public void setHastaKimlikNo(String kimlikNo) {
+		CURRENT_HASTA_KIMLIK = kimlikNo;
+		// Eğer initialize() öncesi çağrılıyorsa, direkt yükle de tetiklenebilir:
+		loadAppointments(kimlikNo);
 	}
-	
+
+	@FXML private TextField filtSaat, filtAlan, filtDoktor, filtHasta;
+	@FXML private TableView<Randevu> randevuTable;
+	@FXML private TableColumn<Randevu, String> alan, saat, doktorAdi, hastaAdi;
+	@FXML private Button filtreleButon, temizleButon, geriDonButon;
+
+	private final ObservableList<Randevu> masterList = FXCollections.observableArrayList();
+	private FilteredList<Randevu> filtRandevuList;
+
 	@FXML
 	private void initialize() {
-		alan.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDoktor().getAlan()));
-		saat.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getSaat()));
-		doktorAdi.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDoktorIsim()));
-		hastaAdi.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getHastaIsim()));
+		// Load data
+		loadAppointments(CURRENT_HASTA_KIMLIK);
 
-		randevuObs.addAll(randevulariGetirDBden());
-//		//Buradan itibaren db etkilesimleri ile degistirilecek
-//		Doktor d1 = new Doktor(159, "vaasm@outlook.com", "Vaas Montenegro", "05123456785", "Cerrahi");
-//		Hasta h1 = new Hasta(1, "walter.chemist@hotmail.com", "Walter White", "05123456784", "12345678901", "15a1{eq");
-//		Randevu r1 = new Randevu(d1, h1, "10.30");
-//
-//		Doktor d2 = new Doktor(152, "crazydoctor06@gmail.com", "Gregory House", "05123456783", "Dahiliye");
-//		Hasta h2 = new Hasta(2, "johnprice1980@yahoo.com", "John Price", "05123456782", "12345678902", "john_1980");
-//		Randevu r2 = new Randevu(d2, h2, "10.00");
-//
-//		randevuObs.addAll(r1, r2); //r1 ve r2 listeye ekleniyor, database ile değiştirilecek.
-		
-		//FilteredList ile "sarıyoruz" (wrap)
-		filtRandevuList = new FilteredList<>(randevuObs, b -> true);
-		
+		// Bind columns
+		alan    .setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getDoktor().getAlan()));
+		saat    .setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getSaat()));
+		doktorAdi.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getDoktorIsim()));
+		hastaAdi .setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getHastaIsim()));
+
+		// Wrap in FilteredList
+		filtRandevuList = new FilteredList<>(masterList, r -> true);
 		randevuTable.setItems(filtRandevuList);
+
+		// Button actions
+		filtreleButon.setOnAction(e -> applyFilter());
+		temizleButon .setOnAction(e -> clearFilter());
+		geriDonButon .setOnAction(e -> switchToMainTR(e));
 	}
 
-	private ArrayList<Randevu> randevulariGetirDBden() {
-		ArrayList<Randevu> randevuListesi = new ArrayList<>();
-
-		String sql = "SELECT r.saat, r.tarih, " +
-				"d.id AS doktor_id, d.isim AS doktor_isim, d.alan AS doktor_alan, d.email AS doktor_email, d.telefon AS doktor_tel, " +
-				"h.id AS hasta_id, h.isim AS hasta_isim, h.email AS hasta_email, h.telefon AS hasta_tel, h.kimlikNo, h.sifre " +
-				"FROM randevu r " +
-				"JOIN doktor d ON r.doktor_id = d.id " +
-				"JOIN hasta h ON r.hasta_kimlikNo = h.kimlikNo";
-
+	private void loadAppointments(String kimlikNo) {
+		masterList.clear();
+		if (kimlikNo == null || kimlikNo.isEmpty()) {
+			System.err.println("TC sağlanmadı, randevu yüklenmedi.");
+			return;
+		}
+		String sql =
+				"SELECT r.saat, d.alan AS doktor_alan, d.isim AS doktor_isim, h.isim AS hasta_isim " +
+						"FROM randevu r " +
+						"JOIN doktor d ON r.doktor_id = d.id " +
+						"JOIN hasta   h ON r.hasta_kimlikNo = h.kimlikNo " +
+						"WHERE r.hasta_kimlikNo = ?";
 		try (Connection conn = DatabaseConnection.connect();
-			 PreparedStatement stmt = conn.prepareStatement(sql);
-			 ResultSet rs = stmt.executeQuery()) {
-
-			while (rs.next()) {
-				Doktor doktor = new Doktor(
-						rs.getInt("doktor_id"),
-						rs.getString("doktor_email"),
-						rs.getString("doktor_isim"),
-						rs.getString("doktor_tel"),
-						rs.getString("doktor_alan")
-				);
-
-				Hasta hasta = new Hasta(
-						rs.getInt("hasta_id"),
-						rs.getString("hasta_email"),
-						rs.getString("hasta_isim"),
-						rs.getString("hasta_tel"),
-						rs.getString("kimlikNo"),
-						rs.getString("sifre")
-				);
-
-				String saat = rs.getString("saat");
-
-				Randevu randevu = new Randevu(doktor, hasta, saat);
-				randevuListesi.add(randevu);
+			 PreparedStatement stmt = conn.prepareStatement(sql)) {
+			stmt.setString(1, kimlikNo);
+			try (ResultSet rs = stmt.executeQuery()) {
+				while (rs.next()) {
+					Doktor doktor = new Doktor(
+							0, "", rs.getString("doktor_isim"), "", rs.getString("doktor_alan")
+					);
+					Hasta hasta = new Hasta(
+							0, "", rs.getString("hasta_isim"), "", kimlikNo, ""
+					);
+					String saatStr = rs.getString("saat");
+					masterList.add(new Randevu(doktor, hasta, saatStr));
+				}
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
-		return randevuListesi;
 	}
-	
+
 	@FXML
 	private void filtrele() {
-	    String saatFilter = filtSaat.getText().toLowerCase().trim();
-	    String alanFilter = filtAlan.getText().toLowerCase().trim();
-	    String doktorFilter = filtDoktor.getText().toLowerCase().trim();
-	    String hastaFilter = filtHasta.getText().toLowerCase().trim();
-
-	    filtRandevuList.setPredicate(r -> {
-	        boolean matchSaat = r.getSaat().toLowerCase().contains(saatFilter);
-	        boolean matchAlan = r.getDoktor().getAlan().toLowerCase().contains(alanFilter);
-	        boolean matchDoktor = r.getDoktorIsim().toLowerCase().contains(doktorFilter);
-	        boolean matchHasta = r.getHastaIsim().toLowerCase().contains(hastaFilter);
-
-	        return matchSaat && matchAlan && matchDoktor && matchHasta;
-	    });
+		applyFilter();
 	}
-	
+
 	@FXML
 	private void temizle() {
-	    filtSaat.clear();
-	    filtAlan.clear();
-	    filtDoktor.clear();
-	    filtHasta.clear();
-	    filtRandevuList.setPredicate(r -> true);
+		clearFilter();
 	}
 
+	private void applyFilter() {
+		String fs = filtSaat  .getText().toLowerCase().trim();
+		String fa = filtAlan  .getText().toLowerCase().trim();
+		String fd = filtDoktor.getText().toLowerCase().trim();
+		String fh = filtHasta .getText().toLowerCase().trim();
 
+		filtRandevuList.setPredicate(r ->
+				r.getSaat().toLowerCase().contains(fs) &&
+						r.getDoktor().getAlan().toLowerCase().contains(fa) &&
+						r.getDoktorIsim().toLowerCase().contains(fd) &&
+						r.getHastaIsim().toLowerCase().contains(fh)
+		);
+	}
+
+	private void clearFilter() {
+		filtSaat.clear(); filtAlan.clear(); filtDoktor.clear(); filtHasta.clear();
+		filtRandevuList.setPredicate(r -> true);
+	}
+
+	@FXML
+	private void switchToMainTR(ActionEvent e) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/application/MainTR.fxml"));
+			Parent root = loader.load();
+			Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
+			stage.getScene().setRoot(root);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
 }
